@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import re
 import subprocess
 import optparse
 def get_arguments():
@@ -25,12 +25,38 @@ def change_mac(interface,new_mac):
     subprocess.call(["ifconfig",interface,"hw","ether", new_mac])
     subprocess.call(["ifconfig",interface,"up"])
     
-    print(f'[+] Succesfully changed mac address to { new_mac}' )
+    #print(f'[+] Succesfully changed mac address to { new_mac}' )
+def get_current_mac(interface):    
+    
+    ifconfig_result = subprocess.check_output(["ifconfig", options.interface]).decode()
+    #print(ifconfig_result)
+
+    mac_address_search_result = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+
+    if mac_address_search_result:
+        return mac_address_search_result.group(0)
+    else:
+        print("[-] Could not read Mac address. ")
+
 
 options = get_arguments()
-#change_mac(options.interface,options.new_mac)
 
-ifconfig_result = subprocess.check_output(["ifconfig",options.interface])
-print(ifconfig_result)
+current_mac = get_current_mac(options.interface)
+print("Current Mac = " + str(current_mac))
+
+change_mac(options.interface,options.new_mac)
+
+current_mac = get_current_mac(options.interface)
+
+if current_mac == options.new_mac:
+    print("[+] Mac address was successfully changed to " + current_mac)
+else:
+    print("[-] Mac address did not get changed. " )
+
+
+
+
+
+
 
 
