@@ -28,4 +28,9 @@ def change_mac(interface,new_mac):
     print(f'[+] Succesfully changed mac address to { new_mac}' )
 
 options = get_arguments()
-change_mac(options.interface,options.new_mac)
+#change_mac(options.interface,options.new_mac)
+
+ifconfig_result = subprocess.check_output(["ifconfig",options.interface])
+print(ifconfig_result)
+
+
