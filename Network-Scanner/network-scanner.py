@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
 import scapy.all as scapy
-import optparse
+import argparse
 from colorama import init, Fore
 
 # Initialize colorama
 init()
 
 def get_arguments():
-    parser = optparse.OptionParser()
-    parser.add_option("-t", "--target", dest="ip", help="[-] Enter the Subnet range of the IP or IP Address\n"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--target", dest="ip", help="[-] Enter the Subnet range of the IP or IP Address\n"
                                                         "            [-] Usage: python3 network-scanner.py -t 192.168.0.0/24")
-    (options, arguments) = parser.parse_args()
+    options = parser.parse_args()
     if not options.ip:
         parser.error("[-] Please specify a target. Use --help for more info.")
     return options
